@@ -1,8 +1,9 @@
-var express      = require('express');
-var path         = require('path');
-var logger       = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser   = require('body-parser');
+var express        = require('express');
+var path           = require('path');
+var logger         = require('morgan');
+var cookieParser   = require('cookie-parser');
+var bodyParser     = require('body-parser');
+var methodOverride = require('method-override');
 
 // Express App
 var app = express();
@@ -10,12 +11,13 @@ var app = express();
 // Router
 var router = require('./router')(app);
 
+// Add Middleware necessary for REST API's
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(methodOverride('X-HTTP-Method-Override'));
+
 // Logger
 app.use(logger('dev'));
-
-// BodyParser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 // CookieParser
 app.use(cookieParser());
